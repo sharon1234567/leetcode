@@ -1,0 +1,35 @@
+思路：
+遍历网格每个节点，遇到未被访问到的1及其周边的1，存储进循环对列。一方面，队列用popleft获取当前1节点，另一方面，队列末尾不断存进去新访问到的1，
+如此一路铺开，当所有访问的1都被0包围时，队列末尾没有新元素进入，但前面还是不断被popleft，直到队列为空，这样就完成了一个岛屿的搜索。该岛屿中
+的所有节点被存储进visited，在接下来的网格遍历中不会被访问到，通过这种方法可以继续搜索新的岛屿。但这种思路不高效
+
+def numIslands(self,grid):
+    if not grid:
+        return 0
+
+    from collections import deque
+    m, n = len(grid), len(grid[0])
+    nums = 0
+
+    dx = [1,-1,0,0]
+    dy = [0,0,1,-1]
+    visited = set()
+    for i in range(m):
+        for j in range(n):
+            if (i,j) not in visited and grid[i][j] == '1':
+                #print(i,j)
+                nums += 1                    
+                x0, y0 = i, j
+                queue = deque([(x0,y0)])
+                visited.add((x0,y0))
+                while queue:
+                    (x0,y0) = queue.popleft()
+                    #print(x0,y0)
+                    for k in range(4):
+                        x = x0 + dx[k]
+                        y = y0 + dy[k]
+                        if 0<=x<m and 0<=y<n and (x,y) not in visited and grid[x][y] == '1':
+                            visited.add((x,y))
+                            queue.append((x,y))
+
+    return nums
