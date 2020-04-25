@@ -1,0 +1,62 @@
+这个算法耗时太久了
+def openLock(self, deadends, target):
+      """
+      :type deadends: List[str]
+      :type target: str
+      :rtype: int
+      """
+      if '0000' in deadends:
+          return -1
+      from collections import deque
+      x0, y0, m0, n0 = '0', '0', '0', '0'
+      dx = [1,-1,0,0,0,0,0,0]
+      dy = [0,0,1,-1,0,0,0,0]
+      dm = [0,0,0,0,1,-1,0,0]
+      dn = [0,0,0,0,0,0,1,-1]
+
+      queue = deque([([x0,y0,m0,n0],0)])
+      visited = set()
+      visited.add((x0,y0,m0,n0))
+      step = 0
+      while queue:
+          pos, step = queue.popleft()
+
+          if ''.join(pos) == target:
+              return step
+          x0, y0, m0, n0 = pos
+          for k in range(8):
+              x = str((int(x0) + dx[k] + 10) % 10)
+              y = str((int(y0) + dy[k] + 10) % 10)
+              m = str((int(m0) + dm[k] + 10) % 10)
+              n = str((int(n0) + dn[k] + 10) % 10)
+              if (x,y,m,n) not in visited and ''.join([x,y,m,n]) not in deadends:
+                  visited.add((x,y,m,n))
+                  queue.append([(x,y,m,n), step + 1])
+
+      return -1
+      
+ 下面这个快很多
+ def openLock(self, deadends, target):
+
+        deadends = set(deadends)
+        if '0000' in deadends:
+            return -1
+        
+        node = '0000'
+
+        queue = deque([('0000',0)])
+        while queue:
+            node, step = queue.popleft()
+
+            if node == target:
+                return step
+            for i in range(4):
+                for j in [1,-1]:
+                    next_node = node[:i] + str((int(node[i]) + j) % 10) + node[i + 1:]
+        
+
+                    if next_node not in deadends:
+                        deadends.add(next_node)
+                        queue.append([next_node, step + 1])
+
+        return -1
