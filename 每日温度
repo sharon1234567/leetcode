@@ -1,0 +1,22 @@
+第一种暴力法，两重循环，超出了时间范围
+class Solution(object):
+    def dailyTemperatures(self, T):
+        """
+        :type T: List[int]
+        :rtype: List[int]
+        """
+        delta = []
+        
+        for i in range(len(T)):
+            k = 0
+            #print(T[i])
+            for j in range(i + 1, len(T)):
+                #print(T[j])
+                if T[i] < T[j]:
+                    k = j-i
+                    break
+
+            delta.append(k)
+        return delta
+
+第二种，用栈的思想，递减栈，即栈中保证每个元素的大小是递减的
